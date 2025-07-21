@@ -10,6 +10,8 @@ use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Transaction\TransactionController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Budget\BudgetController;
+use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Insights\InsightsController;
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
@@ -26,4 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('budgets', BudgetController::class);
     Route::middleware('signed')->get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
+    Route::middleware('auth:sanctum')->get('/dashboard', [DashboardController::class, 'overview']);
+    Route::middleware('auth:sanctum')->get('/insights', [InsightsController::class, 'index']);
 });
