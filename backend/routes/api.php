@@ -9,17 +9,21 @@ use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Transaction\TransactionController;
 use App\Http\Controllers\Category\CategoryController;
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+use App\Http\Controllers\Budget\BudgetController;
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
-Route::middleware('auth:sanctum')->post('/logout', [LogoutController::class, 'logout']);
-Route::middleware('auth:sanctum')->post('/email/verification-notification', [EmailVerificationController::class, 'send']);
-Route::middleware(['auth:sanctum', 'signed'])->get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
-Route::middleware('auth:sanctum')->get('/profile', [ProfileController::class, 'show']);
-Route::middleware('auth:sanctum')->put('/profile', [ProfileController::class, 'update']);
-Route::middleware('auth:sanctum')->apiResource('transactions', TransactionController::class);
-Route::middleware('auth:sanctum')->apiResource('categories', CategoryController::class);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    Route::post('/logout', [LogoutController::class, 'logout']);
+    Route::post('/email/verification-notification', [EmailVerificationController::class, 'send']);
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::put('/profile', [ProfileController::class, 'update']);
+    Route::apiResource('transactions', TransactionController::class);
+    Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('budgets', BudgetController::class);
+    Route::middleware('signed')->get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
+});
