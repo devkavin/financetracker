@@ -30,7 +30,7 @@ class ProfileTest extends TestCase
         $token = $user->createToken('auth_token')->plainTextToken;
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->getJson('/api/profile');
+            ->getJson('/v1/profile');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -59,7 +59,7 @@ class ProfileTest extends TestCase
         ];
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->putJson('/api/profile', $payload);
+            ->putJson('/v1/profile', $payload);
 
         $response->assertStatus(200)
             ->assertJson([
@@ -72,10 +72,10 @@ class ProfileTest extends TestCase
 
     public function test_guest_cannot_access_profile(): void
     {
-        $response = $this->getJson('/api/profile');
+        $response = $this->getJson('/v1/profile');
         $response->assertStatus(401);
 
-        $response = $this->putJson('/api/profile', []);
+        $response = $this->putJson('/v1/profile', []);
         $response->assertStatus(401);
     }
 }

@@ -28,7 +28,7 @@ class EmailVerificationTest extends TestCase
         \Mail::fake();
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->postJson('/api/email/verification-notification');
+            ->postJson('/v1/email/verification-notification');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -60,7 +60,7 @@ class EmailVerificationTest extends TestCase
 
     public function test_guest_cannot_request_verification_email(): void
     {
-        $response = $this->postJson('/api/email/verification-notification');
+        $response = $this->postJson('/v1/email/verification-notification');
         $response->assertStatus(401);
     }
 }

@@ -42,7 +42,7 @@ class TransactionTest extends TestCase
             'date' => now()->toDateString(),
         ];
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->postJson('/api/transactions', $payload);
+            ->postJson('/v1/transactions', $payload);
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'data' => [
@@ -67,7 +67,7 @@ class TransactionTest extends TestCase
             'type' => 'income',
         ]);
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->getJson('/api/transactions');
+            ->getJson('/v1/transactions');
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
@@ -93,7 +93,7 @@ class TransactionTest extends TestCase
             'date' => now()->toDateString(),
         ]);
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->getJson('/api/transactions/' . $transaction->id);
+            ->getJson('/v1/transactions/' . $transaction->id);
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
@@ -124,7 +124,7 @@ class TransactionTest extends TestCase
             'date' => now()->toDateString(),
         ];
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->putJson('/api/transactions/' . $transaction->id, $payload);
+            ->putJson('/v1/transactions/' . $transaction->id, $payload);
         $response->assertStatus(200)
             ->assertJson(['data' => ['amount' => 200.00, 'description' => 'Updated']]);
     }
@@ -144,7 +144,7 @@ class TransactionTest extends TestCase
             'date' => now()->toDateString(),
         ]);
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->deleteJson('/api/transactions/' . $transaction->id);
+            ->deleteJson('/v1/transactions/' . $transaction->id);
         $response->assertStatus(204);
     }
 
@@ -170,7 +170,7 @@ class TransactionTest extends TestCase
             'date' => now()->toDateString(),
         ]);
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->getJson('/api/transactions?type=income');
+            ->getJson('/v1/transactions?type=income');
         $response->assertStatus(200)
             ->assertJsonFragment(['type' => 'income']);
     }

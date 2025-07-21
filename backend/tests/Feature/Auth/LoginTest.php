@@ -30,7 +30,7 @@ class LoginTest extends TestCase
             'password' => 'password123',
         ];
 
-        $response = $this->postJson('/api/login', $payload);
+        $response = $this->postJson('/v1/login', $payload);
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -54,7 +54,7 @@ class LoginTest extends TestCase
             'password' => '',
         ];
 
-        $response = $this->postJson('/api/login', $payload);
+        $response = $this->postJson('/v1/login', $payload);
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['email', 'password']);
@@ -72,7 +72,7 @@ class LoginTest extends TestCase
             'password' => 'wrongpassword',
         ];
 
-        $response = $this->postJson('/api/login', $payload);
+        $response = $this->postJson('/v1/login', $payload);
 
         $response->assertStatus(401)
             ->assertJson(['message' => 'Invalid credentials.']);

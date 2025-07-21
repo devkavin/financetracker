@@ -28,7 +28,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'password',
         ];
 
-        $response = $this->postJson('/api/register', $payload);
+        $response = $this->postJson('/v1/register', $payload);
 
         $response->assertStatus(201)
             ->assertJsonStructure([
@@ -53,7 +53,7 @@ class RegisterTest extends TestCase
             'password' => 'short',
         ];
 
-        $response = $this->postJson('/api/register', $payload);
+        $response = $this->postJson('/v1/register', $payload);
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['name', 'email', 'password']);
