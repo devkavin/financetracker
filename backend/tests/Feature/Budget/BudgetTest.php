@@ -38,7 +38,7 @@ class BudgetTest extends TestCase
             'year' => 2025,
         ];
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->postJson('/api/budgets', $payload);
+            ->postJson('/v1/budgets', $payload);
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'data' => [
@@ -56,7 +56,7 @@ class BudgetTest extends TestCase
             'category_id' => $category->id,
         ]);
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->getJson('/api/budgets');
+            ->getJson('/v1/budgets');
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
@@ -76,7 +76,7 @@ class BudgetTest extends TestCase
             'category_id' => $category->id,
         ]);
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->getJson('/api/budgets/' . $budget->id);
+            ->getJson('/v1/budgets/' . $budget->id);
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
@@ -100,7 +100,7 @@ class BudgetTest extends TestCase
             'year' => 2025,
         ];
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->putJson('/api/budgets/' . $budget->id, $payload);
+            ->putJson('/v1/budgets/' . $budget->id, $payload);
         $response->assertStatus(200)
             ->assertJson(['data' => ['amount' => 1000.00, 'month' => 8, 'year' => 2025]]);
     }
@@ -114,7 +114,7 @@ class BudgetTest extends TestCase
             'category_id' => $category->id,
         ]);
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->deleteJson('/api/budgets/' . $budget->id);
+            ->deleteJson('/v1/budgets/' . $budget->id);
         $response->assertStatus(204);
     }
 
@@ -135,7 +135,7 @@ class BudgetTest extends TestCase
             'year' => 2025,
         ]);
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->getJson('/api/budgets?month=7&year=2025');
+            ->getJson('/v1/budgets?month=7&year=2025');
         $response->assertStatus(200)
             ->assertJsonFragment(['month' => 7, 'year' => 2025]);
     }
