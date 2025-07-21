@@ -30,7 +30,10 @@ class TransactionTest extends TestCase
     public function test_user_can_create_transaction(): void
     {
         [$user, $token] = $this->authenticate();
-        $category = \App\Models\Category::factory()->create(['type' => 'expense']);
+        $category = \App\Models\Category::factory()->create([
+            'name' => 'Food',
+            'type' => 'expense',
+        ]);
         $payload = [
             'amount' => 100.50,
             'type' => 'expense',
@@ -51,10 +54,16 @@ class TransactionTest extends TestCase
     public function test_user_can_list_transactions(): void
     {
         [$user, $token] = $this->authenticate();
-        $category = \App\Models\Category::factory()->create(['type' => 'income']);
+        $category = \App\Models\Category::factory()->create([
+            'name' => 'Income',
+            'type' => 'income',
+        ]);
         \App\Models\Transaction::factory()->count(3)->create([
+            'description' => 'Groceries',
+            'amount' => 100.50,
             'user_id' => $user->id,
             'category_id' => $category->id,
+            'date' => now()->toDateString(),
             'type' => 'income',
         ]);
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
@@ -72,10 +81,16 @@ class TransactionTest extends TestCase
     public function test_user_can_view_single_transaction(): void
     {
         [$user, $token] = $this->authenticate();
-        $category = \App\Models\Category::factory()->create();
+        $category = \App\Models\Category::factory()->create([
+            'name' => 'Test Category',
+            'type' => 'expense',
+        ]);
         $transaction = \App\Models\Transaction::factory()->create([
             'user_id' => $user->id,
             'category_id' => $category->id,
+            'amount' => 50.00,
+            'type' => 'expense',
+            'date' => now()->toDateString(),
         ]);
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
             ->getJson('/api/transactions/' . $transaction->id);
@@ -90,10 +105,16 @@ class TransactionTest extends TestCase
     public function test_user_can_update_transaction(): void
     {
         [$user, $token] = $this->authenticate();
-        $category = \App\Models\Category::factory()->create();
+        $category = \App\Models\Category::factory()->create([
+            'name' => 'Test Category',
+            'type' => 'expense',
+        ]);
         $transaction = \App\Models\Transaction::factory()->create([
             'user_id' => $user->id,
             'category_id' => $category->id,
+            'amount' => 50.00,
+            'type' => 'expense',
+            'date' => now()->toDateString(),
         ]);
         $payload = [
             'amount' => 200.00,
@@ -111,10 +132,16 @@ class TransactionTest extends TestCase
     public function test_user_can_delete_transaction(): void
     {
         [$user, $token] = $this->authenticate();
-        $category = \App\Models\Category::factory()->create();
+        $category = \App\Models\Category::factory()->create([
+            'name' => 'Test Category',
+            'type' => 'expense',
+        ]);
         $transaction = \App\Models\Transaction::factory()->create([
             'user_id' => $user->id,
             'category_id' => $category->id,
+            'amount' => 50.00,
+            'type' => 'expense',
+            'date' => now()->toDateString(),
         ]);
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
             ->deleteJson('/api/transactions/' . $transaction->id);
@@ -124,16 +151,23 @@ class TransactionTest extends TestCase
     public function test_user_can_filter_transactions_by_type(): void
     {
         [$user, $token] = $this->authenticate();
-        $category = \App\Models\Category::factory()->create();
-        \App\Models\Transaction::factory()->create([
-            'user_id' => $user->id,
-            'category_id' => $category->id,
+        $category = \App\Models\Category::factory()->create([
+            'name' => 'Test Category',
             'type' => 'income',
         ]);
         \App\Models\Transaction::factory()->create([
             'user_id' => $user->id,
             'category_id' => $category->id,
+            'type' => 'income',
+            'amount' => 100.00,
+            'date' => now()->toDateString(),
+        ]);
+        \App\Models\Transaction::factory()->create([
+            'user_id' => $user->id,
+            'category_id' => $category->id,
             'type' => 'expense',
+            'amount' => 50.00,
+            'date' => now()->toDateString(),
         ]);
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
             ->getJson('/api/transactions?type=income');
