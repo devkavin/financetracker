@@ -19,7 +19,6 @@
     </source>
     <php>
         <env name="APP_ENV" value="testing"/>
-        <env name="APP_KEY" value="base64:tnqMWMqLK5jNBb79ajHx60I/jmey65r8HZjr9EtI40I="/>
         <env name="DB_CONNECTION" value="pgsql"/>
         <env name="DB_HOST" value="db"/>
         <env name="DB_PORT" value="5432"/>
